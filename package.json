@@ -1,11 +1,15 @@
 {
   "name": "feur-bot-js",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "The ultimate form of humor",
   "main": "app.js",
   "scripts": {
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "SkrienaSenka",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^14.7.1"
+  }
 }
