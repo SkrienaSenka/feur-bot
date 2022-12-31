@@ -9,9 +9,11 @@ import { useUtils } from "./utils.js";
 
     useUtils();
     const { token, clientId } = useAppData();
-    const { reloadCommands } = useCommands(token, clientId);
 
-    await reloadCommands();
+    if (process.argv[2] && ['--reload-commands', '-r'].includes(process.argv[2])) {
+        const { reloadCommands } = useCommands(token, clientId);
+        await reloadCommands();
+    }
 
     const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
 

@@ -4,8 +4,7 @@
   "description": "The ultimate form of humor",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js"
   },
   "author": "SkrienaSenka",
   "license": "ISC",
