@@ -74,7 +74,7 @@ export function useCommands(token, clientId) {
         },
         addbasic: async (interaction) => {
             try {
-                addOrReplaceBasicJoke(interaction.options.getString('trigger'), interaction.options.getString('joke'));
+                addOrReplaceBasicJoke(interaction.options.getString('trigger'), interaction.options.getString('answer'));
                 await interaction.reply('Blague ajoutée avec succès !');
             } catch (e) {
                 await interaction.reply('Une erreur innatendue est survenue (sah Senka sait pas coder).');

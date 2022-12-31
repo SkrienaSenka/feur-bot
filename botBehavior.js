@@ -10,10 +10,6 @@ const {
 } = useAppData();
 
 export function useBehavior(client) {
-    function getRandomInt(max) {
-        return Math.floor(Math.random() * max);
-    }
-
     function onReady() {
         console.log(`Logged in as ${client.user.tag}.`);
         console.log('App running.')
@@ -36,7 +32,7 @@ export function useBehavior(client) {
             refreshPourquoiJokes();
             if (jokes.pourquoi.length > 0) {
                 await message.reply({
-                    content: jokes.pourquoi[getRandomInt(jokes.pourquoi.length)],
+                    content: jokes.pourquoi.sample(),
                     allowedMentions: {
                         repliedUser: shouldMention
                     }
@@ -61,7 +57,7 @@ export function useBehavior(client) {
             refreshQuoiJokes();
             if (jokes.quoi.length > 0) {
                 await message.reply({
-                    content: jokes.quoi[getRandomInt(jokes.quoi.length)],
+                    content: jokes.quoi.sample(),
                     allowedMentions: {
                         repliedUser: shouldMention
                     }

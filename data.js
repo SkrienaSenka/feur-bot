@@ -7,14 +7,10 @@ export function useAppData() {
     const basicJokesFile = './data/basicJokes.txt';
     const jokes = { quoi: [], pourquoi: [], basic: {} };
 
-    function onlyUnique(value, index, self) {
-        return self.indexOf(value) === index;
-    }
-
     function addQuoiJoke(joke) {
         refreshQuoiJokes();
         jokes.quoi.push(joke);
-        jokes.quoi = jokes.quoi.filter(onlyUnique);
+        jokes.quoi = jokes.quoi.unique();
         writeFileSync(quoiJokesFile, JSON.stringify(jokes.quoi), { encoding: "utf-8" });
     }
 
@@ -25,7 +21,7 @@ export function useAppData() {
     function addPourquoiJoke(joke) {
         refreshPourquoiJokes();
         jokes.pourquoi.push(joke);
-        jokes.pourquoi = jokes.pourquoi.filter(onlyUnique);
+        jokes.pourquoi = jokes.pourquoi.unique();
         writeFileSync(pourquoiJokesFile, JSON.stringify(jokes.pourquoi), { encoding: "utf-8" });
     }
 
@@ -33,9 +29,9 @@ export function useAppData() {
         jokes.pourquoi = JSON.parse(readFileSync(pourquoiJokesFile, { encoding: "utf-8" }));
     }
 
-    function addOrReplaceBasicJoke(trigger, joke) {
+    function addOrReplaceBasicJoke(trigger, answer) {
         refreshBasicJokes();
-        jokes.basic[trigger] = joke;
+        jokes.basic[trigger] = answer;
         writeFileSync(basicJokesFile, JSON.stringify(jokes.basic), { encoding: "utf-8" });
     }
 
