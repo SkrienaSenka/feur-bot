@@ -15,9 +15,11 @@ import { useUtils } from "./utils.js";
 
     const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
 
-    const { onReady, onInteraction, onMessage } = useBehavior(client);
+    const { onReady, onGuildJoin, onInteraction, onMessage } = useBehavior(client);
 
     client.on(Events.ClientReady, onReady);
+
+    client.on(Events.GuildCreate, onGuildJoin)
 
     client.on(Events.InteractionCreate, onInteraction);
 

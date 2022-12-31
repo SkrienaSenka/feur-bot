@@ -15,6 +15,13 @@ export function useBehavior(client) {
         console.log('App running.')
     }
 
+    async function onGuildJoin(guild) {
+        const systemChannel = guild.systemChannel;
+        if (systemChannel) {
+            await systemChannel.send('Ça va ou quoi ?');
+        }
+    }
+
     async function onInteraction(interaction) {
         if (!interaction.isChatInputCommand()) return;
 
@@ -84,6 +91,7 @@ export function useBehavior(client) {
 
     return {
         onReady,
+        onGuildJoin,
         onInteraction,
         onMessage
     };
