@@ -39,8 +39,9 @@ export function useBehavior(client) {
         if (message.author.id === client.user.id) return;
 
         const shouldMention = message.author.id.toString() === '317279640354029569';
+        const content = message.content.toLowerCase();
 
-        if (message.content.match(/.*[pP]our.{0,3}([qQ].{0,3}[uU*]|[kK]).{0,3}[oO0*].{0,3}[iI1*].*/)) {
+        if (content.match(/.*[p]our.{0,3}([q].{0,3}[u*]|[k]).{0,3}[o0*].{0,3}[i1*].*/)) {
             refreshPourquoiJokes();
             if (jokes.pourquoi.length > 0) {
                 await message.reply({
@@ -52,7 +53,7 @@ export function useBehavior(client) {
             } else {
                 console.error('Aucune blague "Pourquoi" n\'a été setup')
             }
-        } else if (message.content.match(/.*quoi.*/)) {
+        } else if (content.match(/.*quoi.*/)) {
             await message.reply({
                 content: shouldMention ? 'trivialement feur' : 'feur',
                 allowedMentions: {
@@ -60,7 +61,7 @@ export function useBehavior(client) {
                 }
             });
             return;
-        } else if (message.content.match(/.*([qQ].{0,3}[uU*]|[kK]).{0,3}[oO0*].{0,3}[iI1*].*/)) {
+        } else if (content.match(/.*([q].{0,3}[u*]|[k]).{0,3}[o0*].{0,3}[i1*].*/)) {
             refreshQuoiJokes();
             if (jokes.quoi.length > 0) {
                 await message.reply({
@@ -75,7 +76,7 @@ export function useBehavior(client) {
         } else {
             refreshBasicJokes();
             for (const [bait, answers] of Object.entries(jokes.basic)) {
-                if (message.content.match('.*' + bait + '.{0,3}$')) {
+                if (content.match('.*' + bait + '.{0,2}$')) {
                     await message.reply({
                         content: answers.sample(),
                         allowedMentions: {
