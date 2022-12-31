@@ -76,7 +76,7 @@ export function useBehavior(client) {
         } else {
             refreshBasicJokes();
             for (const [bait, answers] of Object.entries(jokes.basic)) {
-                if (content.match('.*' + bait + '.{0,2}$')) {
+                if (content.match('.*' + bait + '.{0,1}$')) {
                     await message.reply({
                         content: answers.sample(),
                         allowedMentions: {
