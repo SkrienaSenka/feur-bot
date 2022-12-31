@@ -1,4 +1,4 @@
-import { Client, GatewayIntentBits } from 'discord.js';
+import { Client, Events, GatewayIntentBits } from 'discord.js';
 import { useAppData } from './data.js';
 import { useCommands } from './discordCommands.js';
 import { useBehavior } from "./botBehavior.js";
@@ -15,11 +15,11 @@ import { useBehavior } from "./botBehavior.js";
 
     const { onReady, onInteraction, onMessage } = useBehavior(client);
 
-    client.on('ready', onReady);
+    client.on(Events.ClientReady, onReady);
 
-    client.on('interactionCreate', onInteraction);
+    client.on(Events.InteractionCreate, onInteraction);
 
-    client.on('messageCreate', onMessage);
+    client.on(Events.MessageCreate, onMessage);
 
     client.login(token);
 })();

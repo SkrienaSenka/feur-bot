@@ -1,4 +1,4 @@
-import { REST, Routes } from 'discord.js';
+import { REST, DefaultRestOptions, Routes } from 'discord.js';
 import { useAppData } from './data.js';
 
 const {
@@ -8,7 +8,7 @@ const {
 } = useAppData();
 
 export function useCommands(token, clientId) {
-    const rest = new REST({ version: '10' }).setToken(token);
+    const rest = new REST({ version: DefaultRestOptions.version }).setToken(token);
     const commandsDescription = [
         {
             name: 'addquoi',
