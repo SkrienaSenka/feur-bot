@@ -43,7 +43,7 @@ export function useBehavior(client) {
             return;
         }
 
-        if (message.content.match(/.*quoi.*/, message.content)) {
+        if (message.content.match(/.*quoi.*/)) {
             await message.reply({
                 content: shouldMention ? 'trivialement feur' : 'feur',
                 allowedMentions: {
@@ -53,7 +53,7 @@ export function useBehavior(client) {
             return;
         }
 
-        if (message.content.match(/.*([qQ].{0,3}[uU*]|[kK]).{0,3}[oO0*].{0,3}[iI1*].*/, message.content)) {
+        if (message.content.match(/.*([qQ].{0,3}[uU*]|[kK]).{0,3}[oO0*].{0,3}[iI1*].*/)) {
             refreshQuoiJokes();
             if (jokes.quoi.length > 0) {
                 await message.reply({
@@ -70,8 +70,7 @@ export function useBehavior(client) {
 
         refreshBasicJokes();
         for (const [bait, answer] of Object.entries(jokes.basic)) {
-            const regex = new RegExp(`.*${bait}.{{0,5}}$`);
-            if (message.content.match(regex, message.content)) {
+            if (message.content.match('.*' + bait + '.{0,5}$')) {
                 await message.reply({
                     content: answer,
                     allowedMentions: {
