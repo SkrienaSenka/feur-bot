@@ -1,1 +1,1 @@
-{"ah":"rabe","ha":"rabe","a":"rabe","oui":"stiti","ui":"stiti","non":"bril","ouais":"stern","oe":"stern","qui":"quette","ki":"kette","yop":"lait"}
+{"ah":["rabe","RABE"],"ha":["rabe"],"a":["rabe"],"oui":["stiti"],"ui":["stiti"],"non":["bril"],"ouais":["stern"],"oe":["stern"],"qui":["quette"],"ki":["kette"],"yop":["lait"]}

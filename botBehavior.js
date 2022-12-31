@@ -12,13 +12,17 @@ const {
 export function useBehavior(client) {
     function onReady() {
         console.log(`Logged in as ${client.user.tag}.`);
-        console.log('App running.')
+        console.log('App running.');
     }
 
     async function onGuildJoin(guild) {
         const systemChannel = guild.systemChannel;
         if (systemChannel) {
-            await systemChannel.send('Ça va ou quoi ?');
+            try {
+                await systemChannel.send('Ça va ou quoi ?');
+            } catch (e) {
+                console.error(e);
+            }
         }
     }
 
@@ -76,10 +80,10 @@ export function useBehavior(client) {
         }
 
         refreshBasicJokes();
-        for (const [bait, answer] of Object.entries(jokes.basic)) {
+        for (const [bait, answers] of Object.entries(jokes.basic)) {
             if (message.content.match('.*' + bait + '.{0,5}$')) {
                 await message.reply({
-                    content: answer,
+                    content: answers.sample(),
                     allowedMentions: {
                         repliedUser: shouldMention
                     }

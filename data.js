@@ -31,7 +31,8 @@ export function useAppData() {
 
     function addOrReplaceBasicJoke(trigger, answer) {
         refreshBasicJokes();
-        jokes.basic[trigger] = answer;
+        jokes.basic[trigger] ? jokes.basic[trigger].push(answer) : jokes.basic[trigger] = [answer];
+        jokes.basic[trigger] = jokes.basic[trigger].unique();
         writeFileSync(basicJokesFile, JSON.stringify(jokes.basic), { encoding: "utf-8" });
     }
 
