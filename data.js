@@ -12,6 +12,7 @@ export function useAppData() {
         jokes.quoi.push(joke);
         jokes.quoi = jokes.quoi.unique();
         writeFileSync(quoiJokesFile, JSON.stringify(jokes.quoi), { encoding: "utf-8" });
+        clearCache();
     }
 
     function refreshQuoiJokes() {
@@ -23,6 +24,7 @@ export function useAppData() {
         jokes.pourquoi.push(joke);
         jokes.pourquoi = jokes.pourquoi.unique();
         writeFileSync(pourquoiJokesFile, JSON.stringify(jokes.pourquoi), { encoding: "utf-8" });
+        clearCache();
     }
 
     function refreshPourquoiJokes() {
@@ -34,10 +36,20 @@ export function useAppData() {
         jokes.basic[trigger] ? jokes.basic[trigger].push(answer) : jokes.basic[trigger] = [answer];
         jokes.basic[trigger] = jokes.basic[trigger].unique();
         writeFileSync(basicJokesFile, JSON.stringify(jokes.basic), { encoding: "utf-8" });
+        clearCache();
     }
 
     function refreshBasicJokes() {
         jokes.basic = JSON.parse(readFileSync(basicJokesFile, { encoding: "utf-8" }));
+    }
+
+    function clearCache() {
+        delete jokes.quoi;
+        delete jokes.pourquoi;
+        delete jokes.basic;
+        jokes.quoi = [];
+        jokes.pourquoi = [];
+        jokes.basic = {};
     }
 
     return {
@@ -49,6 +61,7 @@ export function useAppData() {
         addPourquoiJoke,
         refreshPourquoiJokes,
         addOrReplaceBasicJoke,
-        refreshBasicJokes
+        refreshBasicJokes,
+        clearCache
     };
 }

@@ -6,7 +6,8 @@ const {
     jokes,
     refreshQuoiJokes,
     refreshPourquoiJokes,
-    refreshBasicJokes
+    refreshBasicJokes,
+    clearCache
 } = useAppData();
 
 export function useBehavior(client) {
@@ -51,10 +52,7 @@ export function useBehavior(client) {
             } else {
                 console.error('Aucune blague "Pourquoi" n\'a été setup')
             }
-            return;
-        }
-
-        if (message.content.match(/.*quoi.*/)) {
+        } else if (message.content.match(/.*quoi.*/)) {
             await message.reply({
                 content: shouldMention ? 'trivialement feur' : 'feur',
                 allowedMentions: {
@@ -62,9 +60,7 @@ export function useBehavior(client) {
                 }
             });
             return;
-        }
-
-        if (message.content.match(/.*([qQ].{0,3}[uU*]|[kK]).{0,3}[oO0*].{0,3}[iI1*].*/)) {
+        } else if (message.content.match(/.*([qQ].{0,3}[uU*]|[kK]).{0,3}[oO0*].{0,3}[iI1*].*/)) {
             refreshQuoiJokes();
             if (jokes.quoi.length > 0) {
                 await message.reply({
@@ -76,21 +72,20 @@ export function useBehavior(client) {
             } else {
                 console.error('Aucune blague "Quoi" n\'a été setup')
             }
-            return;
-        }
-
-        refreshBasicJokes();
-        for (const [bait, answers] of Object.entries(jokes.basic)) {
-            if (message.content.match('.*' + bait + '.{0,5}$')) {
-                await message.reply({
-                    content: answers.sample(),
-                    allowedMentions: {
-                        repliedUser: shouldMention
-                    }
-                });
-                return;
+        } else {
+            refreshBasicJokes();
+            for (const [bait, answers] of Object.entries(jokes.basic)) {
+                if (message.content.match('.*' + bait + '.{0,3}$')) {
+                    await message.reply({
+                        content: answers.sample(),
+                        allowedMentions: {
+                            repliedUser: shouldMention
+                        }
+                    });
+                }
             }
         }
+        clearCache();
     }
 
     return {
