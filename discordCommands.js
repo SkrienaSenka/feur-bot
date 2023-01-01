@@ -8,7 +8,7 @@ export function useCommands(token, clientId) {
     const commandsDescription = [
         {
             name: 'addjoke',
-            description: 'Add a joke based on a trigger',
+            description: 'Add an answer based on a trigger',
             options: [
                 {
                     name: 'trigger',
