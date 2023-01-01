@@ -2,15 +2,11 @@ import { useCommands } from './discordCommands.js';
 import { useAppData } from "./data.js";
 
 const { commandsBehavior } = useCommands();
-const {
-    jokes,
-    refreshQuoiJokes,
-    refreshPourquoiJokes,
-    refreshBasicJokes,
-    clearCache
-} = useAppData();
+const { jokes, refreshJokes, clearCache } = useAppData();
 
 export function useBehavior(client) {
+    const charactersToIgnoreInBetween = '~"#' + "'" + '{([\\-|`_\\\\^@)\\]°}¨$¤£%*<>,?;.:\\/!§';
+    const charactersToIgnoreAtEnd = 'etpsdh';
     const connected = { value: false }
 
     function onReady() {
@@ -41,54 +37,36 @@ export function useBehavior(client) {
     async function onMessage(message) {
         if (message.author.id === client.user.id) return;
 
-        const shouldMention = message.author.id.toString() === '317279640354029569';
+        const isFireDragon = message.author.id.toString() === '317279640354029569';
         const content = message.content.toLowerCase();
 
-        if (content.match(/.*[p]our.{0,3}([q].{0,3}[u*]|[k]).{0,3}[o0*].{0,3}[i1*].*/)) {
-            refreshPourquoiJokes();
-            if (jokes.pourquoi.length > 0) {
-                await message.reply({
-                    content: jokes.pourquoi.sample(),
-                    allowedMentions: {
-                        repliedUser: shouldMention
-                    }
-                });
-            } else {
-                console.error('Aucune blague "Pourquoi" n\'a été setup')
-            }
-        } else if (content.match(/.*quoi.*/)) {
+        if (isFireDragon && message.content.match(/.*quoi.*/)) {
             await message.reply({
-                content: shouldMention ? 'trivialement feur' : 'feur',
+                content: 'trivialement feur',
                 allowedMentions: {
-                    repliedUser: shouldMention
+                    repliedUser: isFireDragon
                 }
             });
             return;
-        } else if (content.match(/.*([q].{0,3}[u*]|[k]).{0,3}[o0*].{0,3}[i1*].*/)) {
-            refreshQuoiJokes();
-            if (jokes.quoi.length > 0) {
+        }
+
+        refreshJokes();
+
+        for (const [bait, answers] of Object.entries(jokes.value)) {
+            let regex = '^.*' + bait.replace(/in_between/g, charactersToIgnoreInBetween) + '$';
+            regex = regex.replace(/at_end/g, charactersToIgnoreAtEnd);
+
+            if (content.match(regex)) {
                 await message.reply({
-                    content: jokes.quoi.sample(),
+                    content: answers.sample(),
                     allowedMentions: {
-                        repliedUser: shouldMention
+                        repliedUser: isFireDragon
                     }
                 });
-            } else {
-                console.error('Aucune blague "Quoi" n\'a été setup')
-            }
-        } else {
-            refreshBasicJokes();
-            for (const [bait, answers] of Object.entries(jokes.basic)) {
-                if (content.match('.*' + bait + '.{0,1}$')) {
-                    await message.reply({
-                        content: answers.sample(),
-                        allowedMentions: {
-                            repliedUser: shouldMention
-                        }
-                    });
-                }
+                break;
             }
         }
+
         clearCache();
     }
 

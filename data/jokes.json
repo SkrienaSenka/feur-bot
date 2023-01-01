@@ -1,0 +1,48 @@
+{
+  "p+[in_between]*o+[in_between]*u+[in_between]*r+[in_between]*(q+[in_between]*[u*]+|k+)[in_between]*[o0*]+[in_between]*[i1*].*": [
+    "Pour feur peut-être",
+    "Parce que feur en fait",
+    "Bah sûrement parce que feur",
+    "Hmm, j'dirais que c'est parce que feur",
+    "J'sais pas trop, peut-être parce que feur",
+    "Plusieurs raisons à cela, en vrai. Mais la première qui me vient à l'esprit c'est parce que feur"
+  ],
+  "(q+[in_between]*[u*]+|k+)[in_between]*[o0*]+[in_between]*[i1*].*": [
+    "fEuR",
+    "feur.",
+    "feur ?",
+    "FEUR !",
+    "Bah feur",
+    "ici ça feur",
+    "feurisson 🔥",
+    "fürher, t'sais le bot nazi",
+    "Il court il court le feurêt",
+    "Ce feur vous a été fourni par le nouveau système de détection",
+    "https://media.discordapp.net/attachments/1056340750696185906/1057415533403840614/image.png",
+    "https://media.discordapp.net/attachments/565220202447372288/1058456581198598294/Screenshot_2022-12-30-19-48-23-929_com.google.android.apps.maps.png?width=707&height=676",
+    "Je suis au regret de vous avouer, que malgré toute la vigilance mise en place dans vos propos, et après la loi passée anti-Valentin le gros fils de pute grâce à l'utilisation du 49.3, il semblerait que votre message soit incomplet. En effet, se trouve-t-il qu'il manque dans ce message, un énorme ***__FEUR__***"
+  ],
+  "n+[in_between]*o+[in_between]*n+[nin_betweenat_end]*": [
+    "bril",
+    "BRIL !"
+  ],
+  "o+[in_between]*(u+[in_between]*a+[in_between]*i+[in_between]*s+|e+)[in_betweenat_end]*": [
+    "stern",
+    "STERN !"
+  ],
+  "(q+[in_between]*u+|k+)[in_between]*i+[iin_betweenat_end]*": [
+    "quette",
+    "kette"
+  ],
+  "u+[in_between]*i+[iin_betweenat_end]*": [
+    "stiti",
+    "STITI !"
+  ],
+  "y+[in_between]*o+[in_between]*p+[pin_betweenat_end]*": [
+    "lait"
+  ],
+  "a+[ain_betweenat_end]*": [
+    "rabe",
+    "RABE !"
+  ]
+}

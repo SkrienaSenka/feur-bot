@@ -1,46 +1,18 @@
 import { REST, DefaultRestOptions, Routes } from 'discord.js';
 import { useAppData } from './data.js';
 
-const {
-    addQuoiJoke,
-    addPourquoiJoke,
-    addOrReplaceBasicJoke
-} = useAppData();
+const { addOrReplaceJoke } = useAppData();
 
 export function useCommands(token, clientId) {
     const rest = new REST({ version: DefaultRestOptions.version }).setToken(token);
     const commandsDescription = [
         {
-            name: 'addquoi',
-            description: 'Add a "Quoi" joke',
-            options: [
-                {
-                    name: 'joke',
-                    description: 'Adds this answer to the "Quoi" trigger',
-                    type: 3,
-                    required: true
-                }
-            ]
-        },
-        {
-            name: 'addpourquoi',
-            description: 'Add a "Pourquoi" joke',
-            options: [
-                {
-                    name: 'joke',
-                    description: 'Adds this answer to the "Pourquoi" trigger',
-                    type: 3,
-                    required: true
-                }
-            ]
-        },
-        {
-            name: 'addbasic',
-            description: 'Add a basic joke like "non bril"',
+            name: 'addjoke',
+            description: 'Add a joke based on a trigger',
             options: [
                 {
                     name: 'trigger',
-                    description: 'The word that triggers the answer',
+                    description: 'Regex to detect, see /help for more details',
                     type: 3,
                     required: true
                 },
@@ -54,27 +26,9 @@ export function useCommands(token, clientId) {
         }
     ];
     const commandsBehavior = {
-        addquoi: async (interaction) => {
+        addjoke: async (interaction) => {
             try {
-                addQuoiJoke(interaction.options.getString('joke'));
-                await interaction.reply('Blague ajoutée avec succès !');
-            } catch (e) {
-                await interaction.reply('Une erreur innatendue est survenue (sah Senka sait pas coder).');
-                console.error(e);
-            }
-        },
-        addpourquoi: async (interaction) => {
-            try {
-                addPourquoiJoke(interaction.options.getString('joke'));
-                await interaction.reply('Blague ajoutée avec succès !');
-            } catch (e) {
-                await interaction.reply('Une erreur innatendue est survenue (sah Senka sait pas coder).');
-                console.error(e);
-            }
-        },
-        addbasic: async (interaction) => {
-            try {
-                addOrReplaceBasicJoke(interaction.options.getString('trigger'), interaction.options.getString('answer'));
+                addOrReplaceJoke(interaction.options.getString('trigger'), interaction.options.getString('answer'));
                 await interaction.reply('Blague ajoutée avec succès !');
             } catch (e) {
                 await interaction.reply('Une erreur innatendue est survenue (sah Senka sait pas coder).');
