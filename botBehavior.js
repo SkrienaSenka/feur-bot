@@ -11,8 +11,11 @@ const {
 } = useAppData();
 
 export function useBehavior(client) {
+    const connected = { value: false }
+
     function onReady() {
         console.log(`Logged in as ${client.user.tag}.`);
+        connected.value = true;
         console.log('App running.');
     }
 
@@ -90,6 +93,7 @@ export function useBehavior(client) {
     }
 
     return {
+        connected,
         onReady,
         onGuildJoin,
         onInteraction,

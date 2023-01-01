@@ -17,7 +17,16 @@ import { useUtils } from "./utils.js";
 
     const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
 
-    const { onReady, onGuildJoin, onInteraction, onMessage } = useBehavior(client);
+    process.on('SIGINT', async function() {
+        if (connected.value) {
+            console.log('Disconnecting the client...');
+            await client.destroy();
+            console.log('Client disconnected.');
+        }
+        process.exit();
+    });
+
+    const { connected, onReady, onGuildJoin, onInteraction, onMessage } = useBehavior(client);
 
     client.on(Events.ClientReady, onReady);
 
@@ -27,5 +36,5 @@ import { useUtils } from "./utils.js";
 
     client.on(Events.MessageCreate, onMessage);
 
-    client.login(token);
+    await client.login(token);
 })();
