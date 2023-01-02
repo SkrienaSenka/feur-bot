@@ -1,16 +1,17 @@
 {
   "name": "feur-bot-js",
-  "version": "1.2.6",
+  "version": "2.0.0",
   "description": "La forme ultime de l'humour",
-  "main": "app.js",
+  "main": "server.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "node server.js"
   },
   "author": "SkrienaSenka",
   "license": "ISC",
   "type": "module",
   "dependencies": {
     "discord.js": "^14.7.1",
-    "emoji-regex": "^10.2.1"
+    "emoji-regex": "^10.2.1",
+    "express": "^4.18.2"
   }
 }

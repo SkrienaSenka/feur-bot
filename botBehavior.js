@@ -12,7 +12,7 @@ export function useBehavior(version, client) {
     function onReady() {
         console.log(`Logged in as ${client.user.tag}.`);
         connected.value = true;
-        console.log(`App running (v${version}).`);
+        console.log(`Bot running (v${version}).`);
     }
 
     async function onGuildJoin(guild) {
