@@ -12,7 +12,7 @@ export function useCommands(token, clientId) {
             options: [
                 {
                     name: 'trigger',
-                    description: 'Regex to detect, see /help for more details',
+                    description: 'Regex to detect, see `/help addjoke` for more details',
                     type: 3,
                     required: true
                 },
@@ -31,8 +31,12 @@ export function useCommands(token, clientId) {
                 addOrReplaceJoke(interaction.options.getString('trigger'), interaction.options.getString('answer'));
                 await interaction.reply('Blague ajoutée avec succès !');
             } catch (e) {
-                await interaction.reply('Une erreur innatendue est survenue (sah Senka sait pas coder).');
-                console.error(e);
+                try {
+                    await interaction.reply('Une erreur innatendue est survenue (sah Senka sait pas coder).');
+                    console.error(e);
+                } catch (e) {
+                    console.error(e);
+                }
             }
         }
     };
@@ -50,6 +54,7 @@ export function useCommands(token, clientId) {
     }
 
     return {
+        commandsDescription,
         commandsBehavior,
         reloadCommands
     };

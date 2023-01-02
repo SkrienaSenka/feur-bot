@@ -2,13 +2,13 @@ import { Client, Events, GatewayIntentBits } from 'discord.js';
 import { useAppData } from './data.js';
 import { useCommands } from './discordCommands.js';
 import { useBehavior } from "./botBehavior.js";
-import { useUtils } from "./utils.js";
+import { loadUtils } from "./utils.js";
 
 (async() => {
     console.log('Starting the app...');
 
-    useUtils();
-    const { token, clientId } = useAppData();
+    loadUtils();
+    const { version, token, clientId } = useAppData();
 
     if (process.argv[2] && ['--reload-commands', '-r'].includes(process.argv[2])) {
         const { reloadCommands } = useCommands(token, clientId);
@@ -26,7 +26,7 @@ import { useUtils } from "./utils.js";
         process.exit();
     });
 
-    const { connected, onReady, onGuildJoin, onInteraction, onMessage } = useBehavior(client);
+    const { connected, onReady, onGuildJoin, onInteraction, onMessage } = useBehavior(version, client);
 
     client.on(Events.ClientReady, onReady);
 

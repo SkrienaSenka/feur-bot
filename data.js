@@ -1,7 +1,8 @@
 import { writeFileSync, readFileSync } from 'fs';
 
 export function useAppData() {
-    const { token, clientId } = JSON.parse(readFileSync('./data/botLogin.txt', { encoding: "utf-8" }));
+    const { version, description } = JSON.parse(readFileSync('./package.json', { encoding: "utf-8" }));
+    const { token, clientId, adminIds, framedIds, skrienaSenkaId, theFireDragonId } = JSON.parse(readFileSync('./data/botConfig.json', { encoding: "utf-8" }));
     const jokesFile = './data/jokes.json';
     const jokes = { quoi: [], pourquoi: [], basic: {}, value: {} };
 
@@ -23,8 +24,14 @@ export function useAppData() {
     }
 
     return {
+        version,
+        description,
         token,
         clientId,
+        adminIds,
+        framedIds,
+        skrienaSenkaId,
+        theFireDragonId,
         jokes,
         addOrReplaceJoke,
         refreshJokes,

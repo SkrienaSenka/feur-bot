@@ -1,18 +1,18 @@
+import emojiRegex from 'emoji-regex'
 import { useCommands } from './discordCommands.js';
 import { useAppData } from "./data.js";
 
+const { framedIds, theFireDragonId, jokes, refreshJokes, clearCache } = useAppData();
 const { commandsBehavior } = useCommands();
-const { jokes, refreshJokes, clearCache } = useAppData();
 
-export function useBehavior(client) {
-    const charactersToIgnoreInBetween = '~"#' + "'" + '{([\\-|`_\\\\^@)\\]°}¨$¤£%*<>,?;.:\\/!§';
+export function useBehavior(version, client) {
     const charactersToIgnoreAtEnd = 'etpsdh';
-    const connected = { value: false }
+    const connected = { value: false };
 
     function onReady() {
         console.log(`Logged in as ${client.user.tag}.`);
         connected.value = true;
-        console.log('App running.');
+        console.log(`App running (v${version}).`);
     }
 
     async function onGuildJoin(guild) {
@@ -30,40 +30,52 @@ export function useBehavior(client) {
         if (!interaction.isChatInputCommand()) return;
 
         if (Object.keys(commandsBehavior).includes(interaction.commandName)) {
-            await commandsBehavior[interaction.commandName](interaction);
+            await commandsBehavior[interaction.commandName](interaction, client);
         }
     }
 
     async function onMessage(message) {
         if (message.author.id === client.user.id) return;
 
-        const isFireDragon = message.author.id.toString() === '317279640354029569';
-        const content = message.content.toLowerCase();
+        const isFireDragon = message.author.id.toString() === theFireDragonId;
 
         if (isFireDragon && message.content.match(/.*quoi.*/)) {
-            await message.reply({
-                content: 'trivialement feur',
-                allowedMentions: {
-                    repliedUser: isFireDragon
-                }
-            });
-            return;
+            try {
+                await message.reply({
+                    content: 'trivialement feur',
+                    allowedMentions: {
+                        repliedUser: true
+                    }
+                });
+                return;
+            } catch (e) {
+                console.error(e);
+            }
         }
+
+        const content = message.content.toLowerCase()
+            .replace(emojiRegex(), '')
+            .replace(/(<:[^<>:]*:[^<>:]*>)*/g, '')
+            .replace(/[ ~"#'{([\-|`_\\^@)\]°}¨$¤£%*<>,?;.:/!§]*/g, '');
+        const isFramed = framedIds.includes(message.author.id.toString());
 
         refreshJokes();
 
         for (const [bait, answers] of Object.entries(jokes.value)) {
-            let regex = '^.*' + bait.replace(/in_between/g, charactersToIgnoreInBetween) + '$';
-            regex = regex.replace(/at_end/g, charactersToIgnoreAtEnd);
+            let regex = '^.*' + bait.replace(/at_end/g, charactersToIgnoreAtEnd) + '$';
 
             if (content.match(regex)) {
-                await message.reply({
-                    content: answers.sample(),
-                    allowedMentions: {
-                        repliedUser: isFireDragon
-                    }
-                });
-                break;
+                try {
+                    await message.reply({
+                        content: answers.sample(),
+                        allowedMentions: {
+                            repliedUser: isFramed
+                        }
+                    });
+                    break;
+                } catch (e) {
+                    console.error(e);
+                }
             }
         }
 

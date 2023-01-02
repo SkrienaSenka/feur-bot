@@ -1,7 +1,7 @@
 {
   "name": "feur-bot-js",
-  "version": "1.0.0",
-  "description": "The ultimate form of humor",
+  "version": "1.2.5",
+  "description": "La forme ultime de l'humour",
   "main": "app.js",
   "scripts": {
     "start": "node app.js"
@@ -10,6 +10,7 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
-    "discord.js": "^14.7.1"
+    "discord.js": "^14.7.1",
+    "emoji-regex": "^10.2.1"
   }
 }
