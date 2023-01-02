@@ -18,7 +18,7 @@ app.get('/version', async (req, res) => {
     res.send({ version: version });
 })
 
-app.get('/bot/launch', async (req, res) => {
+app.get('/bot/start', async (req, res) => {
     await startBot();
     res.send({ code: '200', message: 'Bot started' });
 })
