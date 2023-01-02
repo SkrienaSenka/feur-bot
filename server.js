@@ -8,7 +8,11 @@ loadUtils();
 
 const app = express();
 app.use(express.json());
-const PORT = parseInt(process.argv[process.argv.length - 1], 10);
+let PORT = parseInt(process.argv[process.argv.length - 1], 10);
+if (isNaN(PORT)) {
+    PORT = 9000;
+    console.error('Program should give a port, defaulting to ' + PORT);
+}
 
 const { version, token, clientId } = useAppData();
 const { reloadCommands } = useCommands(token, clientId);
