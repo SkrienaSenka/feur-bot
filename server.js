@@ -18,18 +18,30 @@ const { version, token, clientId } = useAppData();
 const { reloadCommands } = useCommands(token, clientId);
 const { startBot, stopBot, getStatus } = useBot();
 
-app.get('/version', async (req, res) => {
+app.get('/', (req, res) => {
+    res.send({ inviteLink: 'https://discord.com/api/oauth2/authorize?client_id=1057419962827940001&permissions=68608&scope=bot' });
+})
+
+app.get('/version', (req, res) => {
     res.send({ version: version });
 })
 
 app.get('/bot/start', async (req, res) => {
-    await startBot();
-    res.send({ code: '200', message: 'Bot started' });
+    try {
+        await startBot();
+        res.send({ code: '200', message: 'Bot started' });
+    } catch (e) {
+        res.send({ code: '500', message: 'Unknown error' });
+    }
 })
 
 app.get('/bot/stop', async (req, res) => {
-    await stopBot();
-    res.send({ code: '200', message: 'Bot stopped' });
+    if (getStatus()) {
+        await stopBot();
+        res.send({ code: '200', message: 'Bot stopped' });
+    } else {
+        res.send({ code: '400', message: 'Bot not running' });
+    }
 })
 
 app.get('/bot/status', async (req, res) => {
@@ -41,6 +53,6 @@ app.get('/reload-commands', async (req, res) => {
     res.send({ code: '200', message: 'Commands reloaded successfully' });
 })
 
-app.listen(PORT);
-
-console.log("Listening on port " + PORT);
+app.listen(PORT, () => {
+    console.log("Listening on port " + PORT);
+});
