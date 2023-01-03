@@ -1,6 +1,6 @@
 {
   "name": "feur-bot-js",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "description": "La forme ultime de l'humour",
   "main": "app.js",
   "scripts": {

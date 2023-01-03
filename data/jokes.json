@@ -1,5 +1,5 @@
 {
-  "p+o+u+r+(q+[u*]+|k+)[o0*]+[i1*].*": [
+  "p+o+u+r+([q\uD83C\uDDF6]+[u\uD83C\uDDFA*]+|k+)[o0\uD83C\uDDF4*]+[i1\uD83C\uDDEE*].*": [
     "Pour feur peut-être",
     "Parce que feur en fait",
     "Bah sûrement parce que feur",
@@ -7,7 +7,7 @@
     "J'sais pas trop, peut-être parce que feur",
     "Plusieurs raisons à cela, en vrai. Mais la première qui me vient à l'esprit c'est parce que feur"
   ],
-  "(q+[u*]+|k+)[o0*]+[i1*].*": [
+  "([q\uD83C\uDDF6]+[u\uD83C\uDDFA*]+|k+)[o0\uD83C\uDDF4*]+[i1\uD83C\uDDEE*].*": [
     "fEuR",
     "feur.",
     "feur ?",
