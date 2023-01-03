@@ -9,6 +9,9 @@
   "author": "SkrienaSenka",
   "license": "ISC",
   "type": "module",
+  "engines": {
+    "node": ">=16"
+  },
   "dependencies": {
     "discord.js": "^14.7.1",
     "emoji-regex": "^10.2.1",
