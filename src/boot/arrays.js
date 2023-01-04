@@ -1,4 +1,4 @@
-export function loadUtils() {
+export function arrays() {
     Array.prototype.sample = function() {
         return this[~~(Math.random()*this.length)];
     }
@@ -8,8 +8,4 @@ export function loadUtils() {
             return self.indexOf(value) === index;
         })
     }
-}
-
-export function deepCopy(object) {
-    return JSON.parse(JSON.stringify(object))
 }

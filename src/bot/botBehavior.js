@@ -1,18 +1,19 @@
 import emojiRegex from 'emoji-regex'
+import { stylizedStringify } from "../utils/object.js";
 import { useCommands } from './discordCommands.js';
 import { useAppData } from "./data.js";
 
-const { adminIds, framedIds, theFireDragonId, jokes, refreshJokes, clearCache } = useAppData();
-const { commandsBehavior } = useCommands();
+const charactersToIgnoreAtEnd = 'etpsdh';
 
-export function useBehavior(version, client) {
-    const charactersToIgnoreAtEnd = 'etpsdh';
+export function useBehavior(client) {
+    const { version, adminIds, framedIds, theFireDragonId, jokes, refreshJokes, clearCache } = useAppData();
+    const { commandsBehavior } = useCommands();
     const connected = { value: false };
 
     function onReady() {
-        console.log(`Logged in as ${client.user.tag}.`);
         connected.value = true;
-        console.log(`Bot running (v${version}).`);
+        console.log(`Logged in as ${client.user.tag}.`);
+        console.log(`Bot running (v${version}).\n`);
     }
 
     async function onGuildJoin(guild) {
@@ -29,11 +30,21 @@ export function useBehavior(version, client) {
     async function onInteraction(interaction) {
         if (!interaction.isChatInputCommand()) return;
         // TODO Better options management
-        console.log(`[${new Date().toISOString()}] ${interaction.user.tag} tried to use command ${interaction.commandName} with parameters "${interaction.options.getString('trigger')}" "${interaction.options.getString('answer')}"\n`)
-        if (!adminIds.includes(interaction.user.id)) return;
+        console.log(`[${new Date().toISOString()}] ${interaction.user.tag} tried to use command ${interaction.commandName} with parameters :\n${stylizedStringify(interaction.options)}`)
+        if (commandsBehavior[interaction.commandName].protected && !adminIds.includes(interaction.user.id)) {
+            console.log(`Access denied for ${interaction.user.tag} on command ${interaction.commandName}\n`);
+            try {
+                await interaction.reply('L\'accès à cette commande vous est interdit');
+                return;
+            } catch (e) {
+                console.error(e);
+                return;
+            }
+        }
+        console.log(`Access authorized for ${interaction.user.tag} on command ${interaction.commandName}\n`);
 
         if (Object.keys(commandsBehavior).includes(interaction.commandName)) {
-            await commandsBehavior[interaction.commandName](interaction, client);
+            await commandsBehavior[interaction.commandName].behavior(interaction, client);
         }
     }
 

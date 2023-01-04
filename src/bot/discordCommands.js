@@ -1,10 +1,9 @@
 import { REST, DefaultRestOptions, Routes } from 'discord.js';
 import { useAppData } from './data.js';
 
-const { addOrReplaceJoke } = useAppData();
-
-export function useCommands(token, clientId) {
-    const rest = new REST({ version: DefaultRestOptions.version }).setToken(token);
+export function useCommands() {
+    const { addOrReplaceJoke } = useAppData();
+    const rest = new REST({ version: DefaultRestOptions.version }).setToken(process.env.APPLICATION_TOKEN);
     const commandsDescription = [
         {
             name: 'addjoke',
@@ -26,16 +25,19 @@ export function useCommands(token, clientId) {
         }
     ];
     const commandsBehavior = {
-        addjoke: async (interaction) => {
-            try {
-                addOrReplaceJoke(interaction.options.getString('trigger'), interaction.options.getString('answer'));
-                await interaction.reply('Blague ajoutée avec succès !');
-            } catch (e) {
+        addjoke: {
+            protectionLevel: true,
+            behavior: async (interaction) => {
                 try {
-                    await interaction.reply('Une erreur innatendue est survenue (sah Senka sait pas coder).');
-                    console.error(e);
+                    addOrReplaceJoke(interaction.options.getString('trigger'), interaction.options.getString('answer'));
+                    await interaction.reply('Blague ajoutée avec succès !');
                 } catch (e) {
-                    console.error(e);
+                    try {
+                        await interaction.reply('Une erreur innatendue est survenue (sah Senka sait pas coder).');
+                        console.error(e);
+                    } catch (e) {
+                        console.error(e);
+                    }
                 }
             }
         }
@@ -45,9 +47,9 @@ export function useCommands(token, clientId) {
         try {
             console.log('Started refreshing application (/) commands.');
 
-            await rest.put(Routes.applicationCommands(clientId), { body: commandsDescription });
+            await rest.put(Routes.applicationCommands(process.env.BOT_CLIENT_ID), { body: commandsDescription });
 
-            console.log('Successfully reloaded application (/) commands.');
+            console.log('Successfully reloaded application (/) commands.\n');
         } catch (e) {
             console.error(e);
         }
