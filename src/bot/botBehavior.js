@@ -1,4 +1,3 @@
-import emojiRegex from 'emoji-regex'
 import { stylizedStringify } from "../utils/object.js";
 import { useCommands } from './discordCommands.js';
 import { useAppData } from "./data.js";
@@ -69,16 +68,13 @@ export function useBehavior(client) {
             }
         }
 
-        const content = message.content.toLowerCase()
-            .replace(emojiRegex(), '')
-            .replace(/(<:[^:]*:[^>]*>)*/g, '')
-            .replace(/[ ~"#'{([\-|`_\\^@)\]°}¨$¤£%*<>,?;.:/!§]*/g, '');
+        const content = message.content.sanitize();
         const isFramed = framedIds.includes(message.author.id.toString());
 
         refreshJokes();
 
-        for (const [bait, answers] of Object.entries(jokes.value)) {
-            let regex = '^.*' + bait.replace(/at_end/g, charactersToIgnoreAtEnd) + '$';
+        for (const [trigger, answers] of Object.entries(jokes.value)) {
+            let regex = '^.*' + trigger.replace(/at_end/g, charactersToIgnoreAtEnd) + '$';
 
             if (content.match(regex)) {
                 try {
