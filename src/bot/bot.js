@@ -1,5 +1,8 @@
 import { Client, Events, GatewayIntentBits } from 'discord.js';
 import { useBehavior } from './botBehavior.js';
+import { LOG_TYPES, ACTION_TYPES, useLogger } from '../utils/logger.js';
+
+const { log } = useLogger(LOG_TYPES.BOT);
 
 export function useBot() {
     const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
@@ -10,16 +13,15 @@ export function useBot() {
     client.on(Events.MessageCreate, onMessage);
 
     async function startBot() {
-        console.log('Starting the bot...');
+        log(ACTION_TYPES.BOOTING, 'Starting the bot...');
         await client.login(process.env.APPLICATION_TOKEN);
+        log(ACTION_TYPES.START, 'Bot started');
     }
 
-    function stopBot() {
-        if (client.isReady()) {
-            console.log('Disconnecting the client...');
-            client.destroy();
-            console.log('Client disconnected.\n');
-        }
+    async function stopBot() {
+        await client.destroy();
+        connected.value = false;
+        log(ACTION_TYPES.STOP, 'Client disconnected.');
     }
 
     function isActive() {
