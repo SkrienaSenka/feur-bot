@@ -37,6 +37,16 @@ export function useServer(PORT) {
         }
     })
 
+    app.get('/restart', async (req, res) => {
+        if (isActive()) {
+            stopBot();
+            await startBot();
+            res.send({ code: '200', message: 'Bot restarted' });
+        } else {
+            res.send({ code: '400', message: 'Bot not running' });
+        }
+    })
+
     app.get('/status', (req, res) => {
         res.send({ code: '200', status: isActive() ? 'Running' : 'Stopped' });
     })

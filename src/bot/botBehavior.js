@@ -1,4 +1,3 @@
-import { stylizedStringify } from "../utils/object.js";
 import { useCommands } from './discordCommands.js';
 import { useAppData } from "./data.js";
 
@@ -29,7 +28,7 @@ export function useBehavior(client) {
     async function onInteraction(interaction) {
         if (!interaction.isChatInputCommand()) return;
         // TODO Better options management
-        console.log(`[${new Date().toISOString()}] ${interaction.user.tag} tried to use command ${interaction.commandName} with parameters :\n${stylizedStringify(interaction.options)}`)
+        console.log(`[${new Date().toISOString()}] ${interaction.user.tag} tried to use command ${interaction.commandName} with parameters :\n${interaction.options.stylizedStringify()}`)
         if (commandsBehavior[interaction.commandName].protected && !adminIds.includes(interaction.user.id)) {
             console.log(`Access denied for ${interaction.user.tag} on command ${interaction.commandName}\n`);
             try {
@@ -74,7 +73,7 @@ export function useBehavior(client) {
         refreshJokes();
 
         for (const [trigger, answers] of Object.entries(jokes.value)) {
-            let regex = '^.*' + trigger.replace(/at_end/g, charactersToIgnoreAtEnd) + '$';
+            let regex = '^.*' + trigger.toLowerCase().replace(/at_end/g, charactersToIgnoreAtEnd) + '$';
 
             if (content.match(regex)) {
                 try {
