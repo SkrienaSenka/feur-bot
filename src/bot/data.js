@@ -1,5 +1,4 @@
 import { writeFileSync, readFileSync } from 'fs';
-import { stylizedStringify } from "../utils/object.js";
 
 const packageFile = './package.json';
 const botConfigFile = './data/usersConfig.json';
@@ -14,7 +13,7 @@ export function useAppData() {
         refreshJokes();
         jokes.value[trigger] ? jokes.value[trigger].push(answer) : jokes.value[trigger] = [answer];
         jokes.value[trigger] = jokes.value[trigger].unique();
-        writeFileSync(jokesFile, stylizedStringify(jokes.value), { encoding: "utf-8" });
+        writeFileSync(jokesFile, jokes.value.stylizedStringify(), { encoding: "utf-8" });
         clearCache();
     }
 
