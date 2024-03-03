@@ -1,4 +1,4 @@
-import emojiRegex from "emoji-regex";
+import emojiRegex from 'emoji-regex';
 
 export function strings() {
     String.prototype.sanitize = function() {

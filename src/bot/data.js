@@ -1,24 +1,29 @@
 import { writeFileSync, readFileSync } from 'fs';
+import { resolve } from 'path';
 
-const packageFile = './package.json';
-const botConfigFile = './data/usersConfig.json';
-const jokesFile = './data/jokes.json';
+const packageFile = resolve(process.cwd(), 'package.json');
+const botConfigFile = resolve(process.cwd(), 'data', 'usersConfig.json');
+const jokesFile = resolve(process.cwd(), 'data', 'jokes', 'global.json');
 
 export function useAppData() {
-    const { version, description } = JSON.parse(readFileSync(packageFile, { encoding: "utf-8" }));
-    const { adminIds, framedIds, theFireDragonId } = JSON.parse(readFileSync(botConfigFile, { encoding: "utf-8" }));
+    const { version, description } = JSON.parse(readFileSync(packageFile, { encoding: 'utf-8' }));
+    const { adminIds, framedIds, theFireDragonId } = JSON.parse(readFileSync(botConfigFile, { encoding: 'utf-8' }));
     const jokes = { value: {} };
 
     function addOrReplaceJoke(trigger, answer) {
         refreshJokes();
-        jokes.value[trigger] ? jokes.value[trigger].push(answer) : jokes.value[trigger] = [answer];
+        if (jokes.value[trigger]) {
+            jokes.value[trigger].push(answer);
+        } else {
+            jokes.value[trigger] = [answer];
+        }
         jokes.value[trigger] = jokes.value[trigger].unique();
-        writeFileSync(jokesFile, jokes.value.stylizedStringify(), { encoding: "utf-8" });
+        writeFileSync(jokesFile, jokes.value.stylizedStringify(), { encoding: 'utf-8' });
         clearCache();
     }
 
     function refreshJokes() {
-        jokes.value = JSON.parse(readFileSync(jokesFile, { encoding: "utf-8" }));
+        jokes.value = JSON.parse(readFileSync(jokesFile, { encoding: 'utf-8' }));
     }
 
     function clearCache() {

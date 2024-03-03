@@ -1,5 +1,8 @@
 import { useCommands } from './discordCommands.js';
-import { useAppData } from "./data.js";
+import { useAppData } from './data.js';
+import { LOG_TYPES, ACTION_TYPES, useLogger } from '../utils/logger.js';
+
+const { log } = useLogger(LOG_TYPES.BOT);
 
 const charactersToIgnoreAtEnd = 'etpsdh';
 
@@ -10,17 +13,19 @@ export function useBehavior(client) {
 
     function onReady() {
         connected.value = true;
-        console.log(`Logged in as ${client.user.tag}.`);
-        console.log(`Bot running (v${version}).\n`);
+        log(ACTION_TYPES.START, `Logged in as ${client.user.tag} (v${version}).`);
     }
 
     async function onGuildJoin(guild) {
+        const { log: guildLog } = useLogger(LOG_TYPES.GUILD, guild.id.toString());
+        const guildOwner = client.users.cache.get(guild.ownerId);
+        guildLog(ACTION_TYPES.START, `Joined guild ${guild.name} owned by ${guildOwner?.tag ?? 'Owner offline'}`)
         const systemChannel = guild.systemChannel;
         if (systemChannel) {
             try {
                 await systemChannel.send('Ça va ou quoi ?');
             } catch (e) {
-                console.error(e);
+                guildLog(ACTION_TYPES.ERROR, e);
             }
         }
     }
@@ -28,18 +33,18 @@ export function useBehavior(client) {
     async function onInteraction(interaction) {
         if (!interaction.isChatInputCommand()) return;
         // TODO Better options management
-        console.log(`[${new Date().toISOString()}] ${interaction.user.tag} tried to use command ${interaction.commandName} with parameters :\n${interaction.options.stylizedStringify()}`)
+        log(ACTION_TYPES.ACCESS_ASKED, `${interaction.user.tag} tried to use command ${interaction.commandName} with parameters : ${JSON.stringify(interaction.options)}`);
         if (commandsBehavior[interaction.commandName].protected && !adminIds.includes(interaction.user.id)) {
-            console.log(`Access denied for ${interaction.user.tag} on command ${interaction.commandName}\n`);
+            log(ACTION_TYPES.ACCESS_DENIED, `Access denied for ${interaction.user.tag} on command ${interaction.commandName}`);
             try {
                 await interaction.reply('L\'accès à cette commande vous est interdit');
                 return;
             } catch (e) {
-                console.error(e);
+                log(ACTION_TYPES.ERROR, e);
                 return;
             }
         }
-        console.log(`Access authorized for ${interaction.user.tag} on command ${interaction.commandName}\n`);
+        log(ACTION_TYPES.ACCESS_GRANTED, `Access granted for ${interaction.user.tag} on command ${interaction.commandName}`);
 
         if (Object.keys(commandsBehavior).includes(interaction.commandName)) {
             await commandsBehavior[interaction.commandName].behavior(interaction, client);
@@ -49,7 +54,7 @@ export function useBehavior(client) {
     async function onMessage(message) {
         if (message.author.id === client.user.id) return;
         const guildOwner = client.users.cache.get(message.guild.ownerId);
-        console.log(`[${new Date().toISOString()}] ${message.author.tag} in channel "${message.channel.name}" of "${message.guild.name}" owned by ${guildOwner ? guildOwner.tag : 'Idk bro'} :\n${message.content}\n`)
+        log(ACTION_TYPES.NEW_MESSAGE, `${message.author.tag} in channel "${message.channel.name}" of "${message.guild.name}" owned by ${guildOwner?.tag ?? 'Owner offline'} : ${message.content}`);
 
         const isFireDragon = message.author.id.toString() === theFireDragonId;
 
@@ -63,7 +68,7 @@ export function useBehavior(client) {
                 });
                 return;
             } catch (e) {
-                console.error(e);
+                log(ACTION_TYPES.ERROR, e);
             }
         }
 
@@ -85,7 +90,7 @@ export function useBehavior(client) {
                     });
                     break;
                 } catch (e) {
-                    console.error(e);
+                    log(ACTION_TYPES.ERROR, e);
                 }
             }
         }

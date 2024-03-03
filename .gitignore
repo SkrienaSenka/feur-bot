@@ -101,3 +101,9 @@ dist
 
 # TernJS port file
 .tern-port
+
+var/
+
+data/usersConfig.json
+data/backup/
+data/jokes/

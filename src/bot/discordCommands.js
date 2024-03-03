@@ -1,5 +1,8 @@
 import { REST, DefaultRestOptions, Routes } from 'discord.js';
 import { useAppData } from './data.js';
+import { LOG_TYPES, ACTION_TYPES, useLogger } from '../utils/logger.js';
+
+const { log } = useLogger(LOG_TYPES.BOT);
 
 export function useCommands() {
     const { addOrReplaceJoke } = useAppData();
@@ -34,9 +37,9 @@ export function useCommands() {
                 } catch (e) {
                     try {
                         await interaction.reply('Une erreur innatendue est survenue (sah Senka sait pas coder).');
-                        console.error(e);
+                        log(ACTION_TYPES.ERROR, e)
                     } catch (e) {
-                        console.error(e);
+                        log(ACTION_TYPES.ERROR, e)
                     }
                 }
             }
@@ -45,13 +48,11 @@ export function useCommands() {
 
     async function reloadCommands() {
         try {
-            console.log('Started refreshing application (/) commands.');
-
+            log(ACTION_TYPES.BOOTING, 'Started refreshing application (/) commands...');
             await rest.put(Routes.applicationCommands(process.env.BOT_CLIENT_ID), { body: commandsDescription });
-
-            console.log('Successfully reloaded application (/) commands.\n');
+            log(ACTION_TYPES.START, 'Successfully refreshed application (/) commands.');
         } catch (e) {
-            console.error(e);
+            log(ACTION_TYPES.ERROR, e);
         }
     }
 
